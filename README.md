@@ -17,7 +17,7 @@ Service that has an endpoint for creating users.
 To get started you can simply clone this repository using git:
 
 ``` cmd
-git clone https://github.com/mastererickdiaz/nisum.git
+git clone https://github.com/mastererickdiaz/bideasoftware
 cd nisum
 ```
 

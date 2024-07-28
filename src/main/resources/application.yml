@@ -1,0 +1,70 @@
+spring:
+  application:
+    name: app-bidea
+  datasource:
+    url: jdbc:h2:mem:test
+    driverClassName: org.h2.Driver
+    username: sa
+    password: ''
+  sql:
+    init:
+      platform: h2
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: America/Lima
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  data:
+    jpa:
+      repositories:
+        enabled: true
+  jackson:
+    time-zone: America/Lima
+server:
+  servlet:
+    context-path: /bideafactory
+  port: 8085
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type: TRACE
+
+jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+
+aws:
+  external-service:
+    url: https://sbv2bumkomidlxwffpgbh4k6jm0ydskh.lambda-url.us-east-1.on.aws/
+
+resilience4j.circuitbreaker:
+    instances:
+        backendExternal:
+            registerHealthIndicator: true
+            slidingWindowSize: 10
+            permittedNumberOfCallsInHalfOpenState: 3
+            slidingWindowType: count-based
+            minimumNumberOfCalls: 20
+            waitDurationInOpenState: 10s
+            failureRateThreshold: 70
+            
+resilience4j.retry:
+    instances:
+        backendExternal:
+            maxAttempts: 3
+            waitDuration: 10s
+            retryExceptions:
+                - org.springframework.web.client.HttpServerErrorException
+                - java.io.IOException
+            ignoreExceptions:
+                - com.bidea.app.exception.ApiException
